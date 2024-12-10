@@ -11,6 +11,11 @@ import { MarkdownComponent} from "ngx-markdown";
   standalone: true,
   imports: [CommonModule, FormsModule, MarkdownComponent],
   providers: [NotesService, AuthService],
+  styles:`
+    .modal-content {
+      max-height: calc(100vh - 80px); /* Adjust the value as needed */
+      overflow-y: auto;
+    }`,
   template: `
     <div class="min-h-screen bg-gray-100">
       <!-- Navigation Bar -->
@@ -75,7 +80,7 @@ import { MarkdownComponent} from "ngx-markdown";
 
       <!-- Note Modal -->
       <div *ngIf="showModal" class="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
-        <div class="bg-white rounded-lg shadow-xl max-w-6xl w-full m-4"> <!-- Changed max-w-2xl to max-w-4xl -->
+        <div class="bg-white rounded-lg shadow-xl max-w-7xl w-full m-4 modal-content"> <!-- Changed max-w-2xl to max-w-4xl -->
           <div class="px-6 py-4 border-b border-gray-200">
             <h3 class="text-lg font-semibold text-gray-900">{{ currentNote._id ? "Edit Note" : "New Note" }}</h3>
           </div>
