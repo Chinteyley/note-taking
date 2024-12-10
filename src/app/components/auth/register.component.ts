@@ -71,7 +71,7 @@ import { AuthService } from "../../services/auth.service";
                   Already have an account?
                   <a
                     routerLink="/login"
-                    class="btn btn-light-link"
+                    class="btn btn-light-secondary"
                   >
                     Sign in
                   </a>
@@ -108,8 +108,16 @@ export class RegisterComponent {
     this.authService.register(this.username, this.password).subscribe({
       next: () => {
         console.log("Registration successful");
-        this.router.navigate(["/login"], {
-          state: { message: "Registration successful. Please login." },
+        this.authService.login(this.username, this.password).subscribe({
+          next: () => {
+            console.log("Login successful");
+            this.router.navigate(["/notes"]);
+          },
+          error: (error: Error) => {
+            console.error("Login error:", error);
+            this.errorMessage = error.message;
+            this.isLoading = false;
+          },
         });
       },
       error: (error: Error) => {

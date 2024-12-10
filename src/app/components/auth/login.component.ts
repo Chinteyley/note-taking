@@ -77,7 +77,7 @@ import { CommonModule } from "@angular/common";
                   Don't have an account?
                   <a
                     routerLink="/register"
-                    class="btn btn-light-link"
+                    class="btn btn-light-secondary"
                   >
                     Register
                   </a>
