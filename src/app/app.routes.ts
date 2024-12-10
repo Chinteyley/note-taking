@@ -9,4 +9,5 @@ export const routes: Routes = [
   { path: "register", component: RegisterComponent },
   { path: "notes", component: NotesComponent, canActivate: [authGuard] },
   { path: "", redirectTo: "/notes", pathMatch: "full" },
+  { path: "**", redirectTo: "/notes"}
 ];

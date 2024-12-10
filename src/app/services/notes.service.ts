@@ -9,7 +9,7 @@ import { AuthService } from "./auth.service";
   providedIn: "root",
 })
 export class NotesService implements OnDestroy {
-  private apiUrl = "http://localhost:3000/notes";
+  private apiUrl = "/api/notes";
   private notesSubject = new BehaviorSubject<Note[]>([]);
   notes$ = this.notesSubject.asObservable();
   private authSubscription: Subscription;

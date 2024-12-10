@@ -13,7 +13,7 @@ interface AuthResponse {
   providedIn: "root",
 })
 export class AuthService {
-  private apiUrl = "http://localhost:3000";
+  private apiUrl = "/api";
   private authToken = new BehaviorSubject<string | null>(null);
   private initialized = false;
 
