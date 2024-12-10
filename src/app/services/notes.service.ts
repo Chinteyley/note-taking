@@ -68,6 +68,7 @@ export class NotesService implements OnDestroy {
         this.notesSubject.next(notes);
       });
   }
+
   getNotes(): Observable<Note[]> {
     return this.http
       .get<Note[]>(this.apiUrl, {
@@ -116,6 +117,19 @@ export class NotesService implements OnDestroy {
         }),
         catchError((error) => {
           console.error("Error updating note:", error);
+          return throwError(() => error);
+        }),
+      );
+  }
+
+  generateTitle(content: string): Observable<string> {
+    return this.http
+      .post<string>(`${this.apiUrl}/generate-title`, { content }, {
+        headers: this.authService.getAuthHeaders(),
+      })
+      .pipe(
+        catchError((error) => {
+          console.error("Error generating title:", error);
           return throwError(() => error);
         }),
       );

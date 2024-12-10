@@ -57,7 +57,7 @@ import { AuthService } from "../../services/auth.service";
               <button
                 type="submit"
                 [disabled]="isLoading"
-                class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+                class="w-full flex justify-center btn btn-light-primary"
               >
                 {{ isLoading ? "Registering..." : "Register" }}
               </button>
@@ -71,7 +71,7 @@ import { AuthService } from "../../services/auth.service";
                   Already have an account?
                   <a
                     routerLink="/login"
-                    class="font-medium text-indigo-600 hover:text-indigo-500"
+                    class="btn btn-light-link"
                   >
                     Sign in
                   </a>

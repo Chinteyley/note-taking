@@ -11,7 +11,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-mongoose.connect("mongodb://localhost:27017/note-taking");
+mongoose.connect(process.env.MONGO_URI);
 
 // Initialize OpenAI
 const openai = new OpenAI({
@@ -22,10 +22,10 @@ const openai = new OpenAI({
 async function generateAISummary(content) {
   if (!content) return "";
 
-  // If content is short (less than 100 characters), use it as is
-  if (content.length <= 100) {
-    return content;
-  }
+  // // If content is short (less than 100 characters), use it as is
+  // if (content.length <= 100) {
+  //   return content;
+  // }
 
   try {
     const completion = await openai.chat.completions.create({
@@ -85,11 +85,11 @@ const User = mongoose.model("User", userSchema);
 const noteSchema = new mongoose.Schema({
   title: { type: String, required: true },
   content: { type: String, required: true },
-  summary: { type: String },
+  // summary: { type: String },
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
-  isAISummary: { type: Boolean, default: false }, // Track if summary was AI-generated
+  // isAISummary: { type: Boolean, default: false }, // Track if summary was AI-generated
 });
 const Note = mongoose.model("Note", noteSchema);
 
@@ -139,7 +139,7 @@ app.post("/register", async (req, res) => {
   }
 });
 
-app.post("/login", async (req, res) => {
+app.post("/login",  async (req, res) => {
   try {
     const { username, password } = req.body;
     if (!username || !password) {
@@ -181,14 +181,14 @@ app.post("/notes", authenticateToken, async (req, res) => {
 
     // Generate summary based on content length
     const generatedTitle = await generateAISummary(content)
-    const summary = generateBasicSummary(content);
+    // const summary = generateBasicSummary(content);
 
     const note = new Note({
-      title:generatedTitle,
+      title: generatedTitle,
       content,
-      summary: summary,
+      // summary: summary,
       userId: req.user.id,
-      isAISummary: content.length > 100,
+      // isAISummary: content.length > 100,
     });
 
     const savedNote = await note.save();
@@ -208,16 +208,16 @@ app.put("/notes/:id", authenticateToken, async (req, res) => {
 
     // Generate new summary if content changed
 
-    const summary = generateBasicSummary(content);
+    // const summary = generateBasicSummary(content);
 
     const note = await Note.findOneAndUpdate(
       { _id: id, userId: req.user.id },
       {
         title,
         content,
-        summary: summary,
+        // summary: summary,
         updatedAt: Date.now(),
-        isAISummary: content.length > 100,
+        // isAISummary: content.length > 100,
       },
       { new: true },
     );
@@ -257,6 +257,16 @@ app.delete("/notes/:id", authenticateToken, async (req, res) => {
   } catch (error) {
     console.error("Error deleting note:", error);
     res.status(500).json({ message: "Error deleting note" });
+  }
+});
+app.post("/notes/generate-title", authenticateToken, async (req, res) => {
+  try {
+    const { content } = req.body;
+    const title = await generateAISummary(content);
+    res.json(title);
+  } catch (error) {
+    console.error("Error generating title:", error);
+    res.status(500).send("Error generating title");
   }
 });
 

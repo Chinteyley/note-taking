@@ -23,7 +23,7 @@ import { MarkdownComponent} from "ngx-markdown";
             <div class="flex items-center">
               <button
                 (click)="openNewNoteModal()"
-                class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                class="btn btn-light-primary"
               >
                 Add New Note
               </button>
@@ -33,7 +33,7 @@ import { MarkdownComponent} from "ngx-markdown";
       </nav>
 
       <!-- Main Content -->
-      <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+      <main class="max-w-7xl mx-auto py-7 sm:px-6 lg:px-8">
         <!-- Loading State -->
         <div *ngIf="isLoading" class="flex justify-center items-center py-12">
           <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
@@ -41,12 +41,12 @@ import { MarkdownComponent} from "ngx-markdown";
         <div *ngIf="!isLoading && notes.length === 0" class="text-center py-12">
           <p class="text-gray-500">No notes yet. Click 'Add New Note' to create one.</p>
         </div>
-        <div *ngIf="!isLoading && notes.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div *ngIf="!isLoading && notes.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <div *ngFor="let note of sortedNotes; trackBy: trackById" class="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-shadow">
             <!-- Note Header -->
-            <div class="flex justify-between items-start mb-4">
-              <h3 class="text-lg font-semibold text-gray-900">{{ note.title }}</h3>
-              <span class="text-xs text-gray-500">{{ formatDate(note.updatedAt) }}</span>
+            <div class="relative justify-between items-start mb-4">
+              <h3 class="pt-4 text-lg font-semibold text-gray-900">{{ note.title }}</h3>
+              <span class="absolute top-0 text-xs text-gray-500 whitespace-nowrap">{{ formatDate(note.updatedAt) }}</span>
             </div>
 
             <!-- Note Content -->
@@ -90,8 +90,14 @@ import { MarkdownComponent} from "ngx-markdown";
             </div>
 
             <div class="mt-6 flex justify-end space-x-3">
-              <button type="button" (click)="closeModal()" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">Cancel</button>
-              <button type="submit" (click)="saveNote()" [disabled]="!currentNote.content" class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50">Save</button>
+              <button type="button" (click)="closeModal()" class="btn btn-light-secondary">Cancel</button>
+              <button type="button" (click)="generateTitle()" class="btn btn-icon btn-lg btn-light-danger ">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="mr-2">
+                  <path d="M9.6 5.613C7.91 5.466 6.98 4.874 6.484 3.7c-.179-.423-.304-.917-.384-1.5 0-.1-.1-.2-.2-.2s-.2.1-.2.2c-.08.583-.205 1.077-.384 1.5C4.821 4.874 3.891 5.466 2.2 5.613c-.1 0-.2.1-.2.2s.1.2.2.2c2.1.4 3.2 1.187 3.5 3.387 0 .1.1.2.2.2s.2-.1.2-.2c.3-2.2 1.4-2.987 3.5-3.387.1 0 .2-.1.2-.2s-.1-.2-.2-.2ZM19.469 11.865c-4-.8-5.726-2.73-6.526-6.629a.493.493 0 0 0-.474-.371.493.493 0 0 0-.475.376c-.009.006.007-.015 0 0-.8 4-2.625 5.824-6.525 6.624a.5.5 0 0 0 0 1c4 .8 5.717 2.687 6.517 6.587a.493.493 0 0 0 .483.413.493.493 0 0 0 .477-.387c-.005.01.006-.008 0 0 .8-4 2.623-5.813 6.523-6.613a.5.5 0 0 0 0-1ZM21.465 5.8c0-.084-.061-.14-.144-.156l-.056-.013c-1.168-.305-1.876-1.024-2.073-2.108a.153.153 0 0 0-.153-.153v.004c-.084 0-.14.062-.156.144l-.013.056c-.305 1.168-1.024 1.876-2.108 2.073a.153.153 0 0 0-.153.153h.004c0 .084.062.14.145.156l.055.013c1.168.305 1.876 1.024 2.073 2.108 0 .084.069.153.153.153v-.004c.084 0 .14-.062.156-.145l.014-.055c.304-1.168 1.023-1.876 2.107-2.073a.15.15 0 0 0 .15-.153ZM7.919 18.715c-1-.3-1.582-.782-1.782-1.782a.218.218 0 1 0-.436 0c-.3 1-.782 1.582-1.782 1.782a.218.218 0 0 0 0 .436c1 .3 1.582.782 1.782 1.782a.218.218 0 0 0 .436 0c.3-1 .782-1.582 1.782-1.782a.218.218 0 0 0 0-.436Z" fill="currentColor"></path>
+                </svg>
+                Generate Title
+              </button>
+              <button type="submit" (click)="saveNote()" [disabled]="!currentNote.content" class="btn btn-light-primary">Save</button>
             </div>
           </form>
         </div>
@@ -245,7 +251,7 @@ export class NotesComponent implements OnInit, OnDestroy {
   private showNotification(message: string, type: "success" | "error"): void {
     const notification = document.createElement("div");
     notification.className = `fixed bottom-4 right-4 p-4 rounded-md ${
-      type === "success" ? "bg-green-500" : "bg-red-500"
+      type === "success" ? "bg-green-600" : "bg-red-600"
     } text-white z-50`;
     notification.textContent = message;
     document.body.appendChild(notification);
@@ -257,5 +263,20 @@ export class NotesComponent implements OnInit, OnDestroy {
 
   trackById(index: number, note: Note): string {
     return note._id || '';
+  }
+
+  generateTitle(): void {
+    if (!this.currentNote.content) return;
+
+    this.notesService.generateTitle(this.currentNote.content).subscribe({
+      next: (title) => {
+        this.currentNote.title = title;
+        this.showNotification("Title generated successfully", "success");
+      },
+      error: (error) => {
+        console.error("Error generating title:", error);
+        this.showNotification("Failed to generate title", "error");
+      },
+    });
   }
 }

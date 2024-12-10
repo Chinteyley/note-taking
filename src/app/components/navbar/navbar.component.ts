@@ -11,10 +11,9 @@ import { AuthService } from "../../services";
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16">
           <div class="flex items-center">
-            <div class="flex-shrink-0">
-              <a routerLink="/notes" class="text-white text-xl font-bold"
-                >Notes App</a
-              >
+            <div class="flex-shrink-0 flex items-center">
+              <img src="note-taking.png" class="h-10" alt="icon">
+              <a routerLink="/notes" class="text-white text-xl font-bold ml-2">Notes App</a>
             </div>
           </div>
           <div class="flex items-center">
@@ -26,12 +25,12 @@ import { AuthService } from "../../services";
                 Logout
               </button>
             } @else {
-              <a
-                routerLink="/login"
-                class="text-white hover:bg-indigo-700 px-3 py-2 rounded-md text-sm font-medium"
-              >
-                Login
-              </a>
+<!--              <a-->
+<!--                routerLink="/login"-->
+<!--                class="text-white hover:bg-indigo-700 px-3 py-2 rounded-md text-sm font-medium"-->
+<!--              >-->
+<!--                Login-->
+<!--              </a>-->
             }
           </div>
         </div>
