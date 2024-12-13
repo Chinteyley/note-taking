@@ -107,10 +107,17 @@ const authenticateToken = (req, res, next) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
 
-  if (!token) return res.sendStatus(401);
+  if (!token) {
+    return res.status(401).json({ message: "No token provided" });
+  }
 
   jwt.verify(token, "secret", (err, user) => {
-    if (err) return res.sendStatus(403);
+    if (err) {
+      if (err.name === 'TokenExpiredError') {
+        return res.status(401).json({ message: "Token expired" });
+      }
+      return res.status(403).json({ message: "Invalid token" });
+    }
     req.user = user;
     console.log("Authenticated User ID:", req.user.id);
     next();
@@ -138,8 +145,17 @@ app.post("/register", async (req, res) => {
     }
   }
 });
+app.get("/verify-token", authenticateToken, (req, res) => {
+  try {
+    // If the authenticateToken middleware passes, the token is valid
+    res.json({ valid: true, userId: req.user.id });
+  } catch (error) {
+    console.error("Error verifying token:", error);
+    res.status(401).json({ valid: false });
+  }
+});
 
-app.post("/login",  async (req, res) => {
+app.post("/login", async (req, res) => {
   try {
     const { username, password } = req.body;
     if (!username || !password) {
@@ -180,7 +196,7 @@ app.post("/notes", authenticateToken, async (req, res) => {
     const { title, content } = req.body;
 
     // Generate summary based on content length
-    const generatedTitle = await generateAISummary(content)
+    const generatedTitle = await generateAISummary(content);
     // const summary = generateBasicSummary(content);
 
     const note = new Note({
@@ -204,7 +220,7 @@ app.post("/notes", authenticateToken, async (req, res) => {
 app.put("/notes/:id", authenticateToken, async (req, res) => {
   try {
     const { id } = req.params;
-    const { title ,content } = req.body;
+    const { title, content } = req.body;
 
     // Generate new summary if content changed
 

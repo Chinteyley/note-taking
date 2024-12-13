@@ -34,6 +34,9 @@ export class AuthService {
     if (token) {
       this.authToken.next(token);
     }
+    else {
+      this.authToken.next(null)
+    }
     this.initialized = true;
   }
 
@@ -94,5 +97,35 @@ export class AuthService {
 
   getAuthState(): Observable<string | null> {
     return this.authToken.asObservable();
+  }
+  checkAuthStatus(): Observable<boolean> {
+    return new Observable(observer => {
+      const token = localStorage.getItem('authToken');
+      if (!token) {
+        this.authToken.next(null);
+        observer.next(false);
+        observer.complete();
+        return;
+      }
+
+      // Optionally verify token with backend
+      this.http.get(`${this.apiUrl}/verify-token`, {
+        headers: new HttpHeaders({
+          Authorization: `Bearer ${token}`
+        })
+      }).subscribe({
+        next: () => {
+          this.authToken.next(token);
+          observer.next(true);
+          observer.complete();
+        },
+        error: () => {
+          localStorage.removeItem('authToken');
+          this.authToken.next(null);
+          observer.next(false);
+          observer.complete();
+        }
+      });
+    });
   }
 }
