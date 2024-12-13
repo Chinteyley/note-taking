@@ -209,6 +209,19 @@ export class NotesComponent implements OnInit, OnDestroy {
   editNote(note: Note): void {
     this.currentNote = { ...note };
     this.showModal = true;
+    setTimeout(() => {
+      const textarea = document.getElementById('content') as HTMLTextAreaElement;
+      if (textarea) {
+        textarea.style.height = 'auto';
+        textarea.style.height = `${textarea.scrollHeight}px`;
+      }
+    });    setTimeout(() => {
+      const textarea = document.getElementById('content') as HTMLTextAreaElement;
+      if (textarea) {
+        textarea.style.height = 'auto';
+        textarea.style.height = `${textarea.scrollHeight}px`;
+      }
+    });
   }
   deleteNote(note: Note): void {
     if (!note._id) {
