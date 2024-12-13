@@ -4,12 +4,13 @@ import { BehaviorSubject, Observable, throwError, Subscription } from "rxjs";
 import { tap, catchError } from "rxjs/operators";
 import { Note } from "../models/note.model";
 import { AuthService } from "./auth.service";
+import { environment } from "../../environments/environment";
 
 @Injectable({
   providedIn: "root",
 })
 export class NotesService implements OnDestroy {
-  private apiUrl = "/api/notes";
+  private apiUrl = environment.apiUrl + "/notes";
   private notesSubject = new BehaviorSubject<Note[]>([]);
   notes$ = this.notesSubject.asObservable();
   private authSubscription: Subscription;

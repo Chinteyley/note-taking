@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { BehaviorSubject, Observable, throwError, Subject } from "rxjs";
 import { tap, catchError } from "rxjs/operators";
 import { Router } from "@angular/router";
+import { environment } from "../../environments/environment";
 
 interface AuthResponse {
   token: string;
@@ -13,7 +14,7 @@ interface AuthResponse {
   providedIn: "root",
 })
 export class AuthService {
-  private apiUrl = "/api";
+  private apiUrl = environment.apiUrl;
   private authToken = new BehaviorSubject<string | null>(null);
   private initialized = false;
 
